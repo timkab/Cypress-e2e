@@ -1,7 +1,7 @@
 node_modules
 
-**/videos/**
-**/screenshots/**
+cypress/videos/
+cypress/screenshots/
 
 logs
 *.log
