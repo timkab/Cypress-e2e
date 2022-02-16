@@ -1,6 +1,6 @@
-# WIP
+# WorkInProgress
 
-[Buld status]
+[Buld status] will be here
 
 http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
 http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
