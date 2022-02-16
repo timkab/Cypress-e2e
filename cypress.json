@@ -1,0 +1,11 @@
+{
+  "prodBaseURL": "http://passport.steadyapp.com",
+
+  "viewportHeight": 1000,
+  "viewportWidth": 1200,
+
+  "ignoreTestFiles": "*.js",
+  "testFiles": "**/*.feature",
+
+  "integrationFolder": "cypress/tests"
+}
