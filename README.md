@@ -1,6 +1,11 @@
-#WIP
+# WIP
 
-##Cypress run scripts
+[Buld status]
+
+http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
+http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
+
+## Cypress run scripts
 
 $npm run <>
 
