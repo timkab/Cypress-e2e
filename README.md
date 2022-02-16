@@ -17,8 +17,8 @@ http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
 - Confirm cypress `$ npx cypress --version`
 
 ## Run scripts
-`$ npm cy:open` - "TZ=UTC cypress open"
-`$ npm cy:run` - "TZ=UTC cypress run"
-`$ npm cy:all` - "TZ=UTC cypress run --spec \"**/*.features\""
-`$ npm cy:each` - "TZ=UTC cypress run --spec \"**/*.feature\""
-`$ npm cy:run IntroPage/Landing.feature` - "./node_modules/.bin/cypress-tags run -g 'cypress/tests/introPage/Landing.feature'
+- `$ npm cy:open` - "TZ=UTC cypress open"
+- `$ npm cy:run` - "TZ=UTC cypress run"
+- `$ npm cy:all` - "TZ=UTC cypress run --spec \"**/*.features\""
+- `$ npm cy:each` - "TZ=UTC cypress run --spec \"**/*.feature\""
+- `$ npm cy:run IntroPage/Landing.feature` - "./node_modules/.bin/cypress-tags run -g 'cypress/tests/introPage/Landing.feature'
