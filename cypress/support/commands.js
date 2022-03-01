@@ -1,18 +1,19 @@
 import * as jwt from "jsonwebtoken";
 
 Cypress.Commands.add(
-    'loginByAuth0Api', () => {
+    'loginAuth0', () => {
         const client_id = Cypress.env('auth0_client_id')
         const client_secret = Cypress.env('auth0_client_secret')
         const audience = Cypress.env('auth0_audience')
         const scope = Cypress.env('auth0_scope')
         const username = Cypress.env('auth0_username')
         const password = Cypress.env('auth0_password')
+
         cy.log(`Logging in as ${username}`)
 
         cy.request({
             method: 'POST',
-            url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
+            url: `https://steady-prod.auth0.com/oauth/token`,
             body: {
                 grant_type: 'password',
                 username,
@@ -58,7 +59,7 @@ Cypress.Commands.add(
 
             window.localStorage.setItem('auth0Cypress', JSON.stringify(item))
 
-            cy.visit('/')
+            cy.visit(prodBaseURL)
         })
     }
 )
