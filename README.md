@@ -7,13 +7,11 @@ with Cypress and Cucumber
 http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
 http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
 
-## Prerequisites
-- node v16 or up `$ node -v`
-- npm installed `$ npm -v`
-
 ## Setup
 - Clone repository with SSH `$ git clone git@github.com:steadyapps/passport-automation-tests.git`
 - Move to directory `$ cd passport-automation-tests`
+- Install node v16 or up using node installer or run `$ brew install node`
+- Check npm was installed `$ npm -v`
 - Install cypress `$ npm install --save-dev cypress`
 
 ## Run scripts
