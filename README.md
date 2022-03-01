@@ -9,7 +9,7 @@ http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
 
 ## Setup
 - Clone repository with SSH `$ git clone git@github.com:steadyapps/passport-automation-tests.git`
-- Move to directory `$ cd passport-automation-tests`
+- Move to project directory `$ cd passport-automation-tests`
 - Install node (v16 or up) via installer or run `$ brew install node`
 - Check npm is installed `$ npm -v`
 - Install cypress `$ npm install --save-dev cypress`
