@@ -8,12 +8,14 @@ Cypress.Commands.add(
         const scope = Cypress.env('auth0_scope')
         const username = Cypress.env('auth0_username')
         const password = Cypress.env('auth0_password')
+        const url = Cypress.env('auth0_domain')
+        //const base_url = Cypress.env('base_url')
 
         cy.log(`Logging in as ${username}`)
 
         cy.request({
             method: 'POST',
-            url: `https://steady-prod.auth0.com/oauth/token`,
+            url,
             body: {
                 grant_type: 'password',
                 username,
@@ -59,7 +61,7 @@ Cypress.Commands.add(
 
             window.localStorage.setItem('auth0Cypress', JSON.stringify(item))
 
-            cy.visit(prodBaseURL)
+            cy.visit('/') //opens baseUrl specified in cypress.json
         })
     }
 )
