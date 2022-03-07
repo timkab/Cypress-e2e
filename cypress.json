@@ -1,9 +1,7 @@
 {
-  "prodBaseURL": "http://passport.steadyapp.com",
-  "preProdBaseURL": "https://passport-preprod.steadyapp.com",
-  "stgBaseURL": "https://steady-income-verification-web-staging.steadyappdev.com",
-  "devBaseURL": "https://steady-income-verification-web.steadyappdev.com",
+  "baseUrl": "https://steady-income-verification-web-staging.steadyappdev.com",
 
+  "chromeWebSecurity": false,
 
   "viewportHeight": 1000,
   "viewportWidth": 1200,

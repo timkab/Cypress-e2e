@@ -8,7 +8,8 @@
         "cy:run": "TZ=UTC cypress run",
         "cy:all": "TZ=UTC cypress run --spec \"**/*.features\"",
         "cy:each": "TZ=UTC cypress run --spec \"**/*.feature\"",
-        "cy:run IntroPage/Landing.feature": "./node_modules/.bin/cypress-tags run -g 'cypress/tests/introPage/Landing.feature'"
+        "cy:run IntroPage/Landing.feature": "./node_modules/.bin/cypress-tags run -g 'cypress/tests/introPage/Landing.feature'",
+        "cy:open prod url": "cypress open --config baseUrl = http://passport.steadyapp.com"
     },
     "devDependencies": {
         "cypress": "^9.5.0",
