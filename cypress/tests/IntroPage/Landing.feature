@@ -2,14 +2,18 @@
 Feature: Intro Home Page
 
     Background:
-        Given I in logged out state
+        Given Im in logged out state
         And on passport intro page
 
     @tag-1
-    Scenario: Click Get Started cta
-        Given Get Started cta is present and clickable
-        When I click Get Started
-        Then I see login sign up form
+    Scenario: Switch language preference
+        Given Language cta is present
+        When I click Language cta
+        Then I see Choose language module
+        When I click Espanol
+        And Close Choose language module
+        Then I see landing page
+        And Intro and CTA text is in Spanish
 
     @tag-2
     Scenario: Open Terms and conditions
@@ -17,8 +21,4 @@ Feature: Intro Home Page
         When I click Terms link
         Then I should land on Terms and condition page
 
-    @tag-3
-    Scenario: Click Login
-        Given Login cta is present and clickable
-        When I click Login
-        Then I see login sign up form
+

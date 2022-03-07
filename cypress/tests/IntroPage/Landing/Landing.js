@@ -1,22 +1,16 @@
 import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 
-const url = 'https://passport.steadyapp.com'
-
-Given('I in logged out state', () => {
-    cy.visit(url);
+Given('Im in logged out state', () => {
+    cy.visit('/');
     cy.get('button').contains('LOG IN')
 });
 
 And('on passport intro page', () => {
-    cy.visit(url, {
-        onBeforeLoad(win) {
-            cy.stub(win, 'open')
-        }
-    })
+    cy.visit('/');
 })
 
-Given('Get Started cta is present and clickable', () => {
-    cy.get('[class="btn-primary"]').should('be.visible')
+Given('Language cta is present', () => {
+    cy.get('button').contains('Language')
 });
 
 When('I click Get Started', () => {
@@ -33,9 +27,8 @@ Given('Terms link present and clickable', () => {
 });
 
 When('I click Terms link', () => {
-    cy.xpath('//*[@id="root"]/div[1]/footer/small/a').click
-    cy.window().its('open').should('be.called')
-    cy.visit('https://steadyapp.com/terms-of-service')
+    cy.xpath('//*[@id="root"]/div[1]/footer/small/a').invoke('removeAttr', 'target').click()
+
 });
 
 Then('I should land on Terms and condition page', () => {
