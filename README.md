@@ -8,12 +8,12 @@ http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
 http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
 
 ## Setup
-- Clone repository with SSH `$ git clone git@github.com:steadyapps/passport-automation-tests.git`
-- Move to project directory `$ cd passport-automation-tests`
+- Clone repository
+- Move to the project directory `$ cd passport-automation-tests`
 - Install node (v16 or up) via installer or run `$ brew install node`
 - Check npm is installed `$ npm -v`
 - Install cypress `$ npm install --save-dev cypress`
-- create .env in the project root
+- Create .env in the project root
 
 ## Run scripts
 - `$ npm run cy:open` - "TZ=UTC cypress open"
