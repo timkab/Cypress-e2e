@@ -1,5 +1,4 @@
 # Passport e2e testing 
-using Cypress and Cucumber
 
 # :hammer_and_wrench: WorkInProgress :hammer_and_wrench:
 
