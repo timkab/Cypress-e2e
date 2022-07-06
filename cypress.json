@@ -1,13 +1,10 @@
 {
   "baseUrl": "https://steady-income-verification-web-staging.steadyappdev.com",
-
   "chromeWebSecurity": false,
-
   "viewportHeight": 1000,
   "viewportWidth": 1200,
-
   "ignoreTestFiles": "*.js",
   "testFiles": "**/*.feature",
-
-  "integrationFolder": "cypress/tests"
+  "integrationFolder": "cypress/tests",
+  "projectId": "w16nrw"
 }
