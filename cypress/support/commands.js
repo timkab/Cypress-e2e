@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import "cypress-iframe";
 
 const client_id = Cypress.env("auth0_client_id");
 const client_secret = Cypress.env("auth0_client_secret");
@@ -148,7 +149,7 @@ Cypress.Commands.add("linkPlaid", () => {
         url: "https://steady-income-verification-api-staging.steadyappdev.com/user/plaidinstitution",
 
         headers: {
-          Authorization: "Bearer " + token_bearer.body.access_token,
+          Authorization: "Bearer " + token_bearer.body.access_token
         },
 
         body: {
@@ -162,7 +163,43 @@ Cypress.Commands.add("linkPlaid", () => {
         expect(response.status).to.eq(200);
         //expect(response.body).property("link_token").to.not.be.oneOf([null, ""]);
         cy.log(JSON.stringify(response.body));
+
+        cy.request({
+          method: "POST",
+          url: "https://steady-income-verification-api-staging.steadyappdev.com/user/getdata",
+
+          headers: {
+            Authorization: "Bearer " + token_bearer.body.access_token,
+          }
+        }).then((response) => {
+          expect(response.status).to.eq(200);
+          expect(response.body)
+            .property("id")
+            .to.not.be.oneOf([null, ""]);
+
+            cy.request({
+              method: "GET",
+              url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
+
+              headers: {
+                Authorization: "Bearer " + token_bearer.body.access_token
+              }
+            }).then((response) => {
+              expect(response.status).to.eq(200);
+            })
+        })
       });
     });
   });
 });
+
+
+// get iframe document
+Cypress.Commands.add("iframe", { prevSubject: "element" }, ($iframe) => {
+  return new Cypress.Promise((resolve) => {
+    $iframe.ready(function () {
+      resolve($iframe.contents().find("body"));
+    });
+  });
+});
+
