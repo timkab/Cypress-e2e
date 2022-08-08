@@ -8,8 +8,13 @@ const auth0_password = Cypress.env("auth0_password");
 const plaid_stg_public_key = Cypress.env("plaid_stg_public_key");
 
 const testEmailGen = "tkabilov+test_" + Date.now() + "@steadyapp.com";
-const token_bearer = JSON.parse(window.localStorage.getItem("auth0Cypress"));
 
+function getAuth0Token() {
+  let auth0Item = JSON.parse(window.localStorage.getItem("auth0Cypress"));
+  let auth0AccessToken = auth0Item.body.access_token;
+
+  return auth0AccessToken;
+}
 
 Cypress.Commands.add("loginAuth0", (auth0_username) => {
   cy.log(`Logging in as ${auth0_username}`);
@@ -116,7 +121,7 @@ Cypress.Commands.add("linkPlaid", () => {
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user/GetLinkToken",
 
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token
+      Authorization: "Bearer " + getAuth0Token(),
     },
   }).then((response) => {
     expect(response.status).to.eq(200);
@@ -130,7 +135,7 @@ Cypress.Commands.add("linkPlaid", () => {
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user",
 
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token,
+      Authorization: "Bearer " + getAuth0Token(),
     },
   }).then((response) => {
     const ip_user_id = response.body.id;
@@ -156,7 +161,7 @@ Cypress.Commands.add("linkPlaid", () => {
         url: "https://steady-income-verification-api-staging.steadyappdev.com/user/plaidinstitution",
 
         headers: {
-          Authorization: "Bearer " + token_bearer.body.access_token,
+          Authorization: "Bearer " + getAuth0Token(),
         },
 
         body: {
@@ -176,7 +181,7 @@ Cypress.Commands.add("linkPlaid", () => {
           url: "https://steady-income-verification-api-staging.steadyappdev.com/user/getdata",
 
           headers: {
-            Authorization: "Bearer " + token_bearer.body.access_token,
+            Authorization: "Bearer " + getAuth0Token(),
           },
         }).then((response) => {
           expect(response.status).to.eq(200);
@@ -187,7 +192,7 @@ Cypress.Commands.add("linkPlaid", () => {
             url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
 
             headers: {
-              Authorization: "Bearer " + token_bearer.body.access_token,
+              Authorization: "Bearer " + getAuth0Token(),
             },
           }).then((response) => {
             expect(response.status).to.eq(200);
