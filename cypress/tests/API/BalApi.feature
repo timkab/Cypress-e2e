@@ -1,6 +1,6 @@
 Feature: Create source, BAL and get deposits
 
-    Scenario: Link bank account and verify deposits data is retunted 
+    Scenario: Link bank account and verify deposit data is returned
         Given Created and authorized a new user via auth0
         And Selected state and passed referrerId
         And Created transaction source group
