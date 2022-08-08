@@ -1,21 +1,21 @@
 import * as jwt from "jsonwebtoken";
-import "cypress-iframe";
 
-const client_id = Cypress.env("auth0_client_id");
-const client_secret = Cypress.env("auth0_client_secret");
-const audience = Cypress.env("auth0_audience");
-const scope = Cypress.env("auth0_scope");
-//const username = Cypress.env("auth0_username");
-const password = Cypress.env("auth0_password");
+const auth0_client_id = Cypress.env("auth0_client_id");
+const auth0_client_secret = Cypress.env("auth0_client_secret");
+const auth0_audience = Cypress.env("auth0_audience");
+const auth0_scope = Cypress.env("auth0_scope");
+const auth0_password = Cypress.env("auth0_password");
+const plaid_stg_public_key = Cypress.env("plaid_stg_public_key");
 
 const testEmailGen = "tkabilov+test_" + Date.now() + "@steadyapp.com";
 const token_bearer = JSON.parse(window.localStorage.getItem("auth0Cypress"));
 
-Cypress.Commands.add("loginAuth0", (username) => {
-  cy.log(`Logging in as ${username}`);
 
-  if (username == undefined){
-    username = Cypress.env("auth0_username");
+Cypress.Commands.add("loginAuth0", (auth0_username) => {
+  cy.log(`Logging in as ${auth0_username}`);
+
+  if (auth0_username == undefined) {
+    auth0_username = Cypress.env("auth0_username");
   }
 
   cy.request({
@@ -23,14 +23,15 @@ Cypress.Commands.add("loginAuth0", (username) => {
     url: "https://steady-staging.auth0.com/oauth/token",
     body: {
       grant_type: "password",
-      username,
-      password,
-      audience,
-      scope,
-      client_id,
-      client_secret,
+      username: auth0_username,
+      password: auth0_password,
+      audience: auth0_audience,
+      scope: auth0_scope,
+      client_id: auth0_client_id,
+      client_secret: auth0_client_secret,
     },
   }).then(({ body }) => {
+
     const { payload: claims } = jwt.decode(body.id_token, { complete: true });
     const {
       nickname,
@@ -57,15 +58,21 @@ Cypress.Commands.add("loginAuth0", (username) => {
             email_verified,
             sub,
           },
-          audience,
-          client_id,
+          auth0_audience,
+          auth0_client_id,
         },
       },
       expiresAt: exp,
     };
 
     window.localStorage.setItem("auth0Cypress", JSON.stringify(item));
-    cy.visit("/"); //opens baseUrl specified in cypress.json
+    
+    cy.log(
+      "Bearer token: " +
+        JSON.parse(window.localStorage.getItem("auth0Cypress")).body
+          .access_token
+    );
+    //cy.visit("/"); //opens baseUrl specified in cypress.json
   });
 });
 
@@ -75,7 +82,7 @@ Cypress.Commands.add("createNLoginAuth0", () => {
     url: "https://steady-staging.auth0.com/dbconnections/signup",
 
     body: {
-      client_id,
+      auth0_client_id,
       connection: "Username-Password-Authentication",
       email: testEmailGen,
       password: "Test@123",
@@ -93,8 +100,9 @@ Cypress.Commands.add("createNLoginAuth0", () => {
     expect(response.body).property("user_id").to.not.be.oneOf([null, ""]);
     expect(response.body).has.property("email", testEmailGen);
 
-    const ip_user_id = response.body.user_id;
-    cy.log(ip_user_id);
+    cy.log("IP User Id: " + response.body.user_id);
+
+    cy.wait(1500)
 
     cy.loginAuth0(testEmailGen);
   });
@@ -103,13 +111,12 @@ Cypress.Commands.add("createNLoginAuth0", () => {
 // link and verify BAL
 // uses auth0 token from loginAuth0
 Cypress.Commands.add("linkPlaid", () => {
-  // verify getLinkToken via IP api
   cy.request({
     method: "GET",
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user/GetLinkToken",
 
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token,
+      Authorization: "Bearer " + token_bearer.body.access_token
     },
   }).then((response) => {
     expect(response.status).to.eq(200);
@@ -135,7 +142,7 @@ Cypress.Commands.add("linkPlaid", () => {
       url: "https://sandbox.plaid.com/sandbox/public_token/create",
 
       body: {
-        public_key: "6e476d27239401566f34c11b1e289e",
+        public_key: plaid_stg_public_key,
         institution_id: "ins_4",
         initial_products: ["transactions"],
       },
@@ -149,7 +156,7 @@ Cypress.Commands.add("linkPlaid", () => {
         url: "https://steady-income-verification-api-staging.steadyappdev.com/user/plaidinstitution",
 
         headers: {
-          Authorization: "Bearer " + token_bearer.body.access_token
+          Authorization: "Bearer " + token_bearer.body.access_token,
         },
 
         body: {
@@ -170,24 +177,22 @@ Cypress.Commands.add("linkPlaid", () => {
 
           headers: {
             Authorization: "Bearer " + token_bearer.body.access_token,
-          }
+          },
         }).then((response) => {
           expect(response.status).to.eq(200);
-          expect(response.body)
-            .property("id")
-            .to.not.be.oneOf([null, ""]);
+          expect(response.body).property("id").to.not.be.oneOf([null, ""]);
 
-            cy.request({
-              method: "GET",
-              url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
+          cy.request({
+            method: "GET",
+            url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
 
-              headers: {
-                Authorization: "Bearer " + token_bearer.body.access_token
-              }
-            }).then((response) => {
-              expect(response.status).to.eq(200);
-            })
-        })
+            headers: {
+              Authorization: "Bearer " + token_bearer.body.access_token,
+            },
+          }).then((response) => {
+            expect(response.status).to.eq(200);
+          });
+        });
       });
     });
   });
