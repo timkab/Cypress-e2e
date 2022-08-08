@@ -22,6 +22,9 @@ module.exports = (on, config) => {
   config.env.auth0_client_secret = process.env.AUTH0_CLIENT_SECRET
   //config.env.base_url = process.env.BASE_URL
   //config.env.auth0_domain = process.env.AUTH0_DOMAIN
+  config.env.plaid_stg_public_key = process.env.PLAID_STG_PUBLIC_KEY 
+  config.env.plaid_stg_client_id = process.env.PLAID_STG_CLIENT_ID
+  config.env.plaid_stg_secret = process.env.PLAID_STG_SECRET
 
   return config
 }
