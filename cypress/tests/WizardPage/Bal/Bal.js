@@ -3,6 +3,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 
 Given("Created a new user and logged in", () => {
   cy.createNLoginAuth0();
+  cy.visit("/"); //opens base url
 });
 
 And("On Your details step", () => {
