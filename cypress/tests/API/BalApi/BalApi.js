@@ -5,7 +5,13 @@ const plaid_stg_client_id = Cypress.env("plaid_stg_client_id");
 const plaid_stg_secret = Cypress.env("plaid_stg_secret");
 
 const todaysDate = new Date().toISOString().slice(0, 10);
-const token_bearer = JSON.parse(window.localStorage.getItem("auth0Cypress"));
+
+function getAuth0Token() {
+  let auth0Item = JSON.parse(window.localStorage.getItem("auth0Cypress"));
+  let auth0AccessToken = auth0Item.body.access_token;
+
+  return auth0AccessToken;
+}
 
  //func to keep polling /transaction endpoint until data is returned
       function transactionRequest() {
@@ -16,7 +22,7 @@ const token_bearer = JSON.parse(window.localStorage.getItem("auth0Cypress"));
           url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
 
           headers: {
-            Authorization: "Bearer " + token_bearer.body.access_token,
+            Authorization: "Bearer " + getAuth0Token(),
           },
         }).then((response) => {
           // verify if data is returned and within max attempts
@@ -70,7 +76,7 @@ And("Selected state and passed referrerId", () => {
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user",
 
     headers: {
-      Authorization: "Bearer " + token_bearer,
+      Authorization: "Bearer " + getAuth0Token(),
     },
   }).then((response) => {
     let userEmail = response.body.email;
@@ -79,7 +85,7 @@ And("Selected state and passed referrerId", () => {
       method: "PUT",
       url: "https://steady-income-verification-api-staging.steadyappdev.com/user",
       headers: {
-        Authorization: "Bearer " + token_bearer,
+        Authorization: "Bearer " + getAuth0Token(),
       },
 
       body: {
@@ -108,7 +114,7 @@ And("Created transaction source group", () => {
     method: "POST",
     url: "https://steady-income-verification-api-staging.steadyappdev.com/transactiongroups",
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token,
+      Authorization: "Bearer " + getAuth0Token(),
     },
 
     body: {
@@ -126,7 +132,7 @@ When("I call IP api to get link_token", () => {
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user/GetLinkToken",
 
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token,
+      Authorization: "Bearer " + getAuth0Token(),
     },
   }).as("GetLinkToken");
 });
@@ -147,7 +153,7 @@ When("I get IP user ID", () => {
     url: "https://steady-income-verification-api-staging.steadyappdev.com/user",
 
     headers: {
-      Authorization: "Bearer " + token_bearer.body.access_token,
+      Authorization: "Bearer " + getAuth0Token(),
     },
   }).as("ipUserData");
 });
@@ -230,7 +236,7 @@ When("Create plaid item entry via user plaidinstitution endpoint", () => {
           url: "https://steady-income-verification-api-staging.steadyappdev.com/user/plaidinstitution",
 
           headers: {
-            Authorization: "Bearer " + token_bearer.body.access_token,
+            Authorization: "Bearer " + getAuth0Token(),
           },
 
           body: {
@@ -273,9 +279,9 @@ When("Calling transaction endpoint", () => {
    url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
 
    headers: {
-     Authorization: "Bearer " + token_bearer.body.access_token,
+     Authorization: "Bearer " + getAuth0Token(),
    },
- }).as("transaction")})
+ }).as("transaction");})
 
 
   Then(
@@ -301,14 +307,12 @@ When("Calling transaction endpoint", () => {
       url: "https://steady-income-verification-api-staging.steadyappdev.com/user",
 
       headers: {
-        Authorization: "Bearer " + token_bearer.body.access_token,
+        Authorization: "Bearer " + getAuth0Token(),
       },
     }).then((response) => {
       cy.log(response.body.plaidConnection);
       expect(response.status).to.eq(200);
-      expect(response.body.plaidConnection)
-        .property("fullySynced")
-        .to.be(True);
+      expect(response.body.plaidConnection).property("fullySynced").to.be(True);
     });
   });
  
