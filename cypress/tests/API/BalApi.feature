@@ -13,6 +13,6 @@ Feature: Create source, BAL and get deposits
         Then I should get access_token and item_id
         When Create plaid item entry via user plaidinstitution endpoint
         Then I should get successful response from plaidinstituion endpoint
-        When Calling transaction endpoint
+        When Polling transaction endpoint
         Then I should get transaction data returned after AllHistoricalPull is complete
         And Plaid fullySynced prop should be true
