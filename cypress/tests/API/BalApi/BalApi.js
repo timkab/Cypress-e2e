@@ -6,6 +6,8 @@ const plaid_stg_secret = Cypress.env("plaid_stg_secret");
 
 const todaysDate = new Date().toISOString().slice(0, 10);
 
+let attempts = 0;
+
 function getAuth0Token() {
   let auth0Item = JSON.parse(window.localStorage.getItem("auth0Cypress"));
   let auth0AccessToken = auth0Item.body.access_token;
@@ -15,7 +17,8 @@ function getAuth0Token() {
 
  //func to keep polling /transaction endpoint until data is returned
       function transactionRequest() {
-        let attempts = 0;
+        
+        cy.log("Attempt # " + attempts)
 
         cy.request({
           method: "GET",
@@ -26,16 +29,22 @@ function getAuth0Token() {
           },
         }).then((response) => {
           // verify if data is returned and within max attempts
+          cy.log("GET /transaction Response body: " + JSON.stringify(response.body));
           if (attempts > 50) {
-            expect(attempts).to.be.lessThan(50);
-            return cy.log("Exceeded polling attempts");
-          } else if (response.body[0] !== undefined) return;
+            cy.log("Exceeded polling attempts")
+            //fail cy execution
+            expect(attempts).to.be.lessThan(50)
+            return;
+          } 
+          else if (response.body[0] !== undefined) {
+            return
+          } 
+  
           else {
             attempts++;
-            // recursively call func after 2 secs
-            setTimeout(function () {
-              return transactionRequest();
-            }, 2000);
+            // call func after 15 secs timeout
+            cy.wait(15000)
+            transactionRequest();
           }
         });
       }
@@ -272,32 +281,31 @@ Then("I should get successful response from plaidinstituion endpoint", () => {
 );
 
 
-When("Calling transaction endpoint", () => {
+When("Polling transaction endpoint", () => {
 
- cy.request({
-   method: "GET",
-   url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
-
-   headers: {
-     Authorization: "Bearer " + getAuth0Token(),
-   },
- }).as("transaction");})
+  // func to keep polling /transaction until data is returned
+  transactionRequest();
+})
 
 
   Then(
     "I should get transaction data returned after AllHistoricalPull is complete", () => {
-      
-      // func to keep polling /transaction until data is returned
-      transactionRequest();
-     
-      cy.get("@transaction").then((response) => {
-        cy.log(response.body[0]);
-        expect(response.body.status).to.be.equal(200);
-        expect(response.body[0]).property("id").to.not.be.oneOf(["", null])
-        expect(response.body[0]).property("institutionId").to.not.be.oneOf(["", null])
-        expect(response.body[0]).property("userId").to.not.be.oneOf(["", null]);
+
+    cy.request({
+    method: "GET",
+    url: "https://steady-income-verification-api-staging.steadyappdev.com/transaction",
+
+    headers: {
+      Authorization: "Bearer " + getAuth0Token(),
+    },
+  }).then((response) => {
+        cy.log(response.body[0].institutionId);
+        expect(response.status).to.equal(200);
+        expect(response.body[0].id).to.not.be.oneOf(["", null]);
+        expect(response.body[0].institutionId).to.not.be.oneOf(["", null]);
+        expect(response.body[0].userId).to.not.be.oneOf(["", null]);
         
-      })
+      });
     })
 
 
@@ -310,9 +318,9 @@ When("Calling transaction endpoint", () => {
         Authorization: "Bearer " + getAuth0Token(),
       },
     }).then((response) => {
-      cy.log(response.body.plaidConnection);
+      cy.log(JSON.stringify(response.body.plaidConnection.fullySynced));
       expect(response.status).to.eq(200);
-      expect(response.body.plaidConnection).property("fullySynced").to.be(True);
+      expect(response.body.plaidConnection.fullySynced).to.equal(true);
     });
   });
  
