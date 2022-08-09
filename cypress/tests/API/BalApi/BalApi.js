@@ -42,8 +42,8 @@ function getAuth0Token() {
   
           else {
             attempts++;
-            // call func after 15 secs timeout
-            cy.wait(15000)
+            // call func after 20 secs timeout
+            cy.wait(20000)
             transactionRequest();
           }
         });
