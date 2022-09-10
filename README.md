@@ -1,8 +1,10 @@
-# Cypress e2e stg envr testing of https://passport.steadyapp.com/
+# Cypress BDD with Cucumber automation project
+## API and FE tests of passport.steadyapp.com stg envr
 
-[Buld status] is coming
-http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
-http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
+##Exisitng tests: 
+- Auth0 Registration and Login
+- Linking user's Financial instituion (via Plaid) and getting employement data (via Argyle)
+- Post linking/processing fetching and validating data
 
 ## Setup
 - Clone repository
@@ -10,7 +12,7 @@ http://<jenkinsroot>/path/to/job/<buildNumber>/badge/icon?... (for builds)
 - Install node (v16 or up) via installer or run `$ brew install node`
 - Check npm is installed `$ npm -v`
 - Install cypress `$ npm install --save-dev cypress`
-- Create .env in the project root
+- Create .env in the project root and add environment values
 
 ## Run scripts
 - `$ npm run cy:open` - "TZ=UTC cypress open"
