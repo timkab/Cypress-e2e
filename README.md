@@ -1,6 +1,4 @@
-# Cypress e2e testing 
-
-# :hammer_and_wrench: WorkInProgress :hammer_and_wrench:
+# Cypress e2e stg envr testing of https://passport.steadyapp.com/
 
 [Buld status] is coming
 http://<jenkinsroot>/path/to/job/badge/icon?... (for jobs)
