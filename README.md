@@ -1,5 +1,5 @@
 # Cypress BDD with Cucumber automation project
-## API and FE tests of passport.steadyapp.com stg envr
+## API and FE tests
 
 ## Test coverage: 
 - Auth0 Registration and Login
