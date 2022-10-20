@@ -8,7 +8,7 @@
 
 ## Setup
 - Clone repository
-- Move to the project directory `$ cd Cypress-e2e`
+- Move to the project directory `$ cd cypress-bdd`
 - Install node (v16 or up) via installer or run `$ brew install node`
 - Check npm is installed `$ npm -v`
 - Install cypress `$ npm install --save-dev cypress`
